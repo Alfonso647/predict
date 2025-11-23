@@ -5,10 +5,19 @@ const express = require("express");
 const path = require("path");
 const predictRoutes = require("./routes/predictRoutes");
 const { initModel } = require("./services/tfModelService");
-
 const PORT = process.env.PORT || 3002;
-
 const app = express();
+
+
+//MongoDB
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/predictionsDB')
+.then(() => {
+  console.log('[DB] Conexión a la DB correcta');
+}).catch(err => {
+  console.error('Error de la conexión a la DB:', err)
+});
+
 app.use(express.json());
 
 // Servir la carpeta del modelo TFJS (model/model.json + pesos)

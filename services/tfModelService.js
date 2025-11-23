@@ -94,23 +94,26 @@ async function predict(features) {
   if (!Array.isArray(features) || features.length !== inputDim) {
     throw new Error(`features must be an array of ${inputDim} numbers`);
   }
-
+  
+  //Tensor
   const X = tf.tensor2d([features], [1, inputDim], "float32");
 
+  //Ejecutar modelo
   let out;
   if (typeof model.executeAsync === "function") {
     out = await model.executeAsync({ [inputName]: X });
   } else {
     out = model.execute({ [inputName]: X });
   }
-
+  
+  //Extraemos predicción
   const preds2d = Array.isArray(out)
     ? await out[0].array()
     : await out.array();
-
   const predictionReal = preds2d?.[0]?.[0] ?? 0;
   const prediction = Math.max(predictionReal, 0); // clamp a 0
 
+  //Limpieza
   if (Array.isArray(out)) out.forEach(t => t?.dispose?.());
   else out?.dispose?.();
   X.dispose();

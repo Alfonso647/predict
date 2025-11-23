@@ -149,6 +149,11 @@ app.post('/predict', async (req, res) => {
 
     // Tensores
     const X = tf.tensor2d([features], [1, inputDim], "float32");
+    
+    const mean = [/* valores del tensor 'unknown' */];
+    const scale = [/* valores del tensor 'truediv_recip' */];
+
+    const normalizedFeatures = features.map((x,i) => (x - mean[i]) * scale[i]);
 
     let out;
     if (typeof model.executeAsync === "function") {
