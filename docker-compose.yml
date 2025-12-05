@@ -9,7 +9,7 @@ services:
       - "27017:27017"  # opcional, solo si quieres acceder desde tu host
     volumes:
       - mongo-data:/data/db  # persistencia de datos
-e
+
   predict:
     build: .              # usa el Dockerfile de este proyecto
     image: predict:1.0    # nombre de la imagen
