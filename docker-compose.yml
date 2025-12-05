@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"  # opcional, solo si quieres acceder desde tu host
+    volumes:
+      - mongo-data:/data/db  # persistencia de datos
+
+  predict:
+    build: .              # usa el Dockerfile de este proyecto
+    image: predict:1.0    # nombre de la imagen
+    container_name: predict
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    env_file:
+      - .env.docker       # variables de entorno para este servicio
+    ports:
+      - "3002:3002"       # host:contenedor
+
+volumes:
+  mongo-data:
